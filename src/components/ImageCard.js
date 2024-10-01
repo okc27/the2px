@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import './ImageCard.css';
 
-const ImageCard = ({ title, description, svg, color }) => {
+const ImageCard = ({ title, description, svg, color, bgColor }) => {
   const [svgContent, setSvgContent] = useState('');
 
   useEffect(() => {
-    // Fetch SVG content and update it with the selected color
     fetch(svg)
       .then(response => response.text())
       .then(svgText => {
-        // Change only the fill color that matches #6c63ff
         const coloredSvgText = svgText.replace(/fill="#6c63ff"/g, `fill="${color}"`);
         setSvgContent(coloredSvgText);
       });
-  }, [svg, color]); // Re-fetch when svg or color changes
+  }, [svg, color]);
 
-  // Function to convert SVG to PNG
   const convertSvgToPng = () => {
     const svgBlob = new Blob([svgContent], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(svgBlob);
@@ -28,7 +25,6 @@ const ImageCard = ({ title, description, svg, color }) => {
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
-      // Convert canvas to PNG and trigger download
       canvas.toBlob((blob) => {
         const pngUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -37,32 +33,28 @@ const ImageCard = ({ title, description, svg, color }) => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        URL.revokeObjectURL(pngUrl); // Cleanup the blob URL
+        URL.revokeObjectURL(pngUrl);
       });
     };
 
-    img.src = url; // Load the SVG as an image
+    img.src = url;
   };
 
   const convertSvgToJpeg = () => {
     const svgBlob = new Blob([svgContent], { type: 'image/svg+xml' });
     const url = URL.createObjectURL(svgBlob);
     const img = new Image();
-  
+
     img.onload = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       canvas.width = img.width;
       canvas.height = img.height;
-  
-      // Fill the canvas with a white background
-      ctx.fillStyle = '#ffffff';
+
+      ctx.fillStyle = bgColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-      // Draw the SVG image on top of the white background
       ctx.drawImage(img, 0, 0);
-  
-      // Convert canvas to JPEG and trigger download
+
       canvas.toBlob((blob) => {
         const jpegUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -71,24 +63,24 @@ const ImageCard = ({ title, description, svg, color }) => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        URL.revokeObjectURL(jpegUrl); // Cleanup the blob URL
-      }, 'image/jpeg'); // Specify JPEG format
+        URL.revokeObjectURL(jpegUrl);
+      }, 'image/jpeg');
     };
-  
-    img.src = url; // Load the SVG as an image
+
+    img.src = url;
   };
-  
+
   return (
-    <div className="image-card">
-      <h3>{title}</h3>
-      <p>{description}</p>
+    <div className="image-card card p-3 text-center">
+      <h3 className="card-title display-5">{title}</h3> {/* Use Bootstrap's display classes for responsive title */}
+      <p className="card-text">{description}</p>
       <div className="image-preview" dangerouslySetInnerHTML={{ __html: svgContent }} />
-      <div className="download-buttons">
-        <a href={svg} download className="download-btn">Download SVG</a>
-        <button className="download-btn" onClick={convertSvgToPng}>
+      <div className="download-buttons mt-3 btn-group" role="group">
+        <a href={svg} download className="btn btn-primary">Download SVG</a>
+        <button className="btn btn-success" onClick={convertSvgToPng}>
           Download PNG
         </button>
-        <button className="download-btn" onClick={convertSvgToJpeg}>
+        <button className="btn btn-warning" onClick={convertSvgToJpeg}>
           Download JPEG
         </button>
       </div>

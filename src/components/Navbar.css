@@ -1,0 +1,23 @@
+.navbar {
+  background-color: #7f8fe9;
+}
+
+.color-picker {
+  display: flex;
+  align-items: center;
+}
+
+.color-picker label {
+  margin-right: 5px;
+}
+
+.form-control-color {
+  width: 50px; /* Set a fixed width for the color picker */
+  border: none;
+  padding: 0; /* Remove padding for a cleaner look */
+}
+
+.form-control-color:focus {
+  outline: none; /* Remove outline on focus */
+  box-shadow: none; /* Remove box-shadow on focus */
+}
