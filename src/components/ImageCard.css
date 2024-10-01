@@ -1,0 +1,41 @@
+.image-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .image-preview {
+    max-width: 100%; /* Ensure it doesn't exceed the card width */
+    max-height: 200px; /* Set a max height to control image size */
+    margin: 0 auto; /* Center the image */
+    overflow: hidden; /* Hide any overflow */
+  }
+  
+  .image-preview svg {
+    width: 100%; /* Make SVG take full width of the container */
+    height: auto; /* Maintain aspect ratio */
+  }
+  
+  .download-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Add spacing between buttons */
+  }
+  
+  .download-btn {
+    padding: 10px 16px;
+    border: none;
+    background-color: #6c63ff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .download-btn:hover {
+    background-color: #5a54e0; /* Darker shade for hover effect */
+  }
+  
