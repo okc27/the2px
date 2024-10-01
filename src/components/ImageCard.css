@@ -38,4 +38,9 @@
   .download-btn:hover {
     background-color: #5a54e0; /* Darker shade for hover effect */
   }
+  .download-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Add spacing between buttons */
+  }
   
