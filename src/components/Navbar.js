@@ -10,7 +10,7 @@ const Navbar = ({ svgColor, setSvgColor, bgColor, setBgColor }) => {
           type="button" 
           style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontSize: '1.75rem', fontWeight: 'bold' }} // Enhanced styling for the website name
         >
-          the2pix
+          the2px
         </button>
         <div className="ms-auto">
           <div className="color-picker d-flex align-items-center">
