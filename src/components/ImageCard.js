@@ -41,7 +41,6 @@ const ImageCard = ({ title, description, svgUrl, svgColor, backgroundColor }) =>
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
-
   const convertSvgToPng = () => {
     if (!svgContent) {
       console.error('No SVG content available for conversion.');
@@ -79,6 +78,7 @@ const ImageCard = ({ title, description, svgUrl, svgColor, backgroundColor }) =>
 
     img.src = url;
   };
+
 
   const convertSvgToJpeg = () => {
     if (!svgContent) {
@@ -119,6 +119,7 @@ const ImageCard = ({ title, description, svgUrl, svgColor, backgroundColor }) =>
     img.src = url;
   };
 
+
   return (
     <div className="image-card card p-3 text-center">
       <h3 className="card-title display-5">{title}</h3>
@@ -126,7 +127,7 @@ const ImageCard = ({ title, description, svgUrl, svgColor, backgroundColor }) =>
 
       <div
         className="image-preview"
-        style={{ backgroundColor: backgroundColor }} // Apply background color to preview
+        style={{ backgroundColor }} // Apply background color to preview
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
 
