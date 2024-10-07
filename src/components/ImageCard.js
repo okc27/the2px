@@ -1,44 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import './ImageCard.css';
 
-const ImageCard = ({ title, description, svgUrl }) => {
+const ImageCard = ({ title, description, svgUrl, svgColor, backgroundColor }) => {
   const [svgContent, setSvgContent] = useState('');
-  const [isLoading, setIsLoading] = useState(true); // Loading state
-  const [hasError, setHasError] = useState(false); // Error state
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff'); // Default background color
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const fetchSvgContent = async () => {
       try {
-        const response = await fetch(svgUrl); // Fetch the SVG content
+        const response = await fetch(svgUrl);
         if (!response.ok) {
           throw new Error(`Network response was not ok: ${response.statusText}`);
         }
-        const content = await response.text();
+        let content = await response.text();
+        // Change the color in the SVG content
+        content = content.replace(/#6c63ff/g, svgColor); // Change #6c63ff to the selected SVG color
         setSvgContent(content);
-        setHasError(false); // Reset error state
+        setHasError(false);
       } catch (error) {
         console.error('Error fetching SVG:', error.message);
-        setHasError(true); // Set error state
+        setHasError(true);
       } finally {
-        setIsLoading(false); // Set loading state to false
+        setIsLoading(false);
       }
     };
 
     fetchSvgContent();
-  }, [svgUrl]);
+  }, [svgUrl, svgColor]); // Re-fetch when svgColor changes
 
   const downloadSvg = () => {
     const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(svgBlob);
 
     const link = document.createElement('a');
-    link.href = url; // Use the blob URL
-    link.setAttribute('download', `${title}.svg`); // Name the file appropriately
+    link.href = url;
+    link.setAttribute('download', `${title}.svg`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url); // Clean up the object URL after download
+    URL.revokeObjectURL(url);
   };
 
   const convertSvgToPng = () => {
@@ -57,9 +58,10 @@ const ImageCard = ({ title, description, svgUrl }) => {
       canvas.height = img.height;
       const ctx = canvas.getContext('2d');
 
-      // Draw the image without a background for PNG
+      // PNG should have transparent background
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0);
-      URL.revokeObjectURL(url); // Clean up
+      URL.revokeObjectURL(url);
 
       canvas.toBlob((blob) => {
         const link = document.createElement('a');
@@ -75,7 +77,7 @@ const ImageCard = ({ title, description, svgUrl }) => {
       console.error('Error loading SVG as image for PNG conversion:', error);
     };
 
-    img.src = url; // Start loading the SVG
+    img.src = url;
   };
 
   const convertSvgToJpeg = () => {
@@ -94,11 +96,11 @@ const ImageCard = ({ title, description, svgUrl }) => {
       canvas.height = img.height;
       const ctx = canvas.getContext('2d');
 
-      // Set the canvas background color for JPEG
-      ctx.fillStyle = backgroundColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill background color
+      // Apply the selected background color for JPEG
+      ctx.fillStyle = backgroundColor || '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0);
-      URL.revokeObjectURL(url); // Clean up
+      URL.revokeObjectURL(url);
 
       canvas.toBlob((blob) => {
         const link = document.createElement('a');
@@ -114,27 +116,23 @@ const ImageCard = ({ title, description, svgUrl }) => {
       console.error('Error loading SVG as image for JPEG conversion:', error);
     };
 
-    img.src = url; // Start loading the SVG
+    img.src = url;
   };
 
   return (
     <div className="image-card card p-3 text-center">
       <h3 className="card-title display-5">{title}</h3>
       <p className="card-text">{description}</p>
-      <div className="image-preview" dangerouslySetInnerHTML={{ __html: svgContent }} />
-      {isLoading && <p>Loading SVG...</p>} {/* Loading message */}
-      {hasError && <p className="text-danger">Failed to load SVG.</p>} {/* Error message */}
-      
-      <div className="mt-3">
-        <label htmlFor="backgroundColorPicker">Background Color:</label>
-        <input
-          type="color"
-          id="backgroundColorPicker"
-          value={backgroundColor}
-          onChange={(e) => setBackgroundColor(e.target.value)} // Update the background color
-        />
-      </div>
-      
+
+      <div
+        className="image-preview"
+        style={{ backgroundColor: backgroundColor }} // Apply background color to preview
+        dangerouslySetInnerHTML={{ __html: svgContent }}
+      />
+
+      {isLoading && <p>Loading SVG...</p>}
+      {hasError && <p className="text-danger">Failed to load SVG.</p>}
+
       <div className="download-buttons mt-3 btn-group" role="group">
         <button className="btn btn-primary" onClick={downloadSvg} disabled={isLoading}>
           Download SVG
@@ -142,7 +140,7 @@ const ImageCard = ({ title, description, svgUrl }) => {
         <button className="btn btn-success" onClick={convertSvgToPng} disabled={isLoading || !svgContent}>
           Download PNG
         </button>
-        <button className="btn btn-warning" onClick={convertSvgToJpeg} disabled={isLoading || !svgContent}>
+        <button className="btn btn-warning" onClick={convertSvgToJpeg} disabled={isLoading}>
           Download JPEG
         </button>
       </div>

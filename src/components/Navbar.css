@@ -1,23 +1,50 @@
 .navbar {
-  background-color: #7f8fe9;
+  background-color: #add8e6; /* Light blue background */
 }
 
 .color-picker {
   display: flex;
-  align-items: center;
+  align-items: center; /* Center align the color pickers */
+  justify-content: center; /* Center pickers horizontally */
 }
 
 .color-picker label {
-  margin-right: 5px;
+  margin-right: 5px; /* Spacing between labels and inputs */
 }
 
-.form-control-color {
-  width: 50px; /* Set a fixed width for the color picker */
-  border: none;
-  padding: 0; /* Remove padding for a cleaner look */
+.color-picker input {
+  margin-left: 10px;
+  padding: 1px; /* Spacing between inputs */
+  border: 1px solid #6c63ff; /* Add border for input fields */
+  border-radius: 4px; /* Add border radius for rounded edges */
 }
 
-.form-control-color:focus {
-  outline: none; /* Remove outline on focus */
-  box-shadow: none; /* Remove box-shadow on focus */
+.navbar-brand {
+  font-weight: bold; /* Make brand text bold */
+  font-size: 1.5rem; /* Increase brand text size */
+  text-align: center; /* Center the text */
+  margin: 0 auto;
+  margin-left: 10px; /* Center the brand in the navbar */
+}
+
+@media (max-width: 768px) {
+  .color-picker {
+      display: flex; /* Ensures items can be aligned */
+      justify-content: center; /* Centers the items horizontally */
+      align-items: center; /* Centers items vertically */
+      margin-top: 10px; /* Keeps the margin as is */
+      width: 100%; /* Makes the color picker take full width if needed */
+  }
+}
+
+
+@media (max-width: 768px) {
+  .navbar-brand {
+      font-weight: bold;
+      font-size: 1.5rem;
+      text-align: center;
+      display: block; /* Ensures the brand takes up full width */
+      margin: 0 auto; /* Centers the brand within its container */
+      width: 100%; /* Makes the brand take the full width of the navbar */
+  }
 }
